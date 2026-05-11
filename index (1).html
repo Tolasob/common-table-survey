@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Common Table - アンケート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Klee One', 'Shippori Mincho', serif;
+    color: #4a4238;
+    background: #fdfaf3;
+    position: relative;
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* 水彩風の背景装飾（CSSのみ） */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -80px;
+    right: -100px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle at 30% 30%,
+      rgba(150, 190, 220, 0.35) 0%,
+      rgba(150, 190, 220, 0.15) 40%,
+      transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(2px);
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -120px;
+    left: -120px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle at 60% 40%,
+      rgba(200, 220, 150, 0.4) 0%,
+      rgba(240, 200, 130, 0.2) 50%,
+      transparent 75%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(2px);
+  }
+
+  /* 追加の装飾円 */
+  .deco-circle-1 {
+    position: fixed;
+    top: 40%;
+    right: -60px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle,
+      rgba(230, 130, 110, 0.25) 0%,
+      rgba(230, 130, 110, 0.1) 50%,
+      transparent 75%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(3px);
+  }
+
+  .deco-circle-2 {
+    position: fixed;
+    top: 15%;
+    left: -50px;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle,
+      rgba(180, 200, 140, 0.3) 0%,
+      transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(3px);
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+
+  /* ヘッダー */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    position: relative;
+  }
+
+  .header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: #b8a988;
+    margin: 24px auto 0;
+  }
+
+  .title {
+    font-family: 'Caveat', cursive;
+    font-size: 42px;
+    font-weight: 600;
+    color: #6b5d4a;
+    margin: 0 0 8px;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: #8a7d6a;
+    margin: 0;
+    letter-spacing: 1px;
+  }
+
+  /* イントロ文 */
+  .intro {
+    background: rgba(255, 252, 244, 0.7);
+    border-left: 3px solid #c9b896;
+    padding: 18px 22px;
+    margin-bottom: 36px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #5a5040;
+  }
+
+  .intro p {
+    margin: 0;
+  }
+
+  .intro .time {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #8a7d6a;
+  }
+
+  /* 設問ブロック */
+  .question {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 12px;
+    padding: 24px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(180, 160, 130, 0.08);
+    backdrop-filter: blur(4px);
+  }
+
+  .question-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #5a4d3a;
+    margin-bottom: 6px;
+  }
+
+  .question-hint {
+    display: block;
+    font-size: 12px;
+    color: #9a8d7a;
+    margin-bottom: 14px;
+  }
+
+  /* 入力欄 */
+  textarea, input[type="text"], input[type="email"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d8c8a8;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #4a4238;
+    background: rgba(255, 255, 255, 0.9);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: vertical;
+  }
+
+  textarea {
+    min-height: 80px;
+    line-height: 1.6;
+  }
+
+  textarea:focus, input[type="text"]:focus, input[type="email"]:focus {
+    outline: none;
+    border-color: #b8a26a;
+    box-shadow: 0 0 0 3px rgba(200, 180, 130, 0.15);
+  }
+
+  /* チェックボックス・ラジオ */
+  .option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .option-group .subgroup-label {
+    font-size: 12px;
+    color: #8a7d6a;
+    margin-top: 12px;
+    margin-bottom: 2px;
+    padding-left: 4px;
+  }
+
+  .option-group .subgroup-label:first-child {
+    margin-top: 0;
+  }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 12px;
+    background: rgba(252, 248, 238, 0.6);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    font-size: 14px;
+  }
+
+  .option:hover {
+    background: rgba(245, 235, 215, 0.7);
+    border-color: #e0d0a8;
+  }
+
+  .option input {
+    margin-right: 10px;
+    margin-top: 3px;
+    cursor: pointer;
+    accent-color: #b8a26a;
+    flex-shrink: 0;
+  }
+
+  .option input:checked + span {
+    color: #5a4d3a;
+    font-weight: 500;
+  }
+
+  .option span {
+    flex: 1;
+  }
+
+  /* 送信ボタン */
+  .submit-area {
+    text-align: center;
+    margin-top: 36px;
+  }
+
+  .submit-btn {
+    background: linear-gradient(135deg, #c9a96a 0%, #b8956a 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 48px;
+    font-family: 'Klee One', serif;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+    box-shadow: 0 3px 12px rgba(180, 140, 90, 0.25);
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba(180, 140, 90, 0.35);
+  }
+
+  .submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  /* 完了画面 */
+  .thanks {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 16px;
+    margin-top: 40px;
+  }
+
+  .thanks.show {
+    display: block;
+  }
+
+  .thanks-title {
+    font-family: 'Caveat', cursive;
+    font-size: 36px;
+    color: #6b5d4a;
+    margin: 0 0 24px;
+  }
+
+  .thanks-message {
+    font-size: 15px;
+    color: #5a4d3a;
+    line-height: 2;
+    margin: 0;
+  }
+
+  /* エラー表示 */
+  .error-msg {
+    display: none;
+    color: #c25a4a;
+    background: #fce8e0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .error-msg.show {
+    display: block;
+  }
+
+  /* レスポンシブ */
+  @media (max-width: 480px) {
+    .container { padding: 24px 16px 48px; }
+    .title { font-size: 36px; }
+    .question { padding: 20px 18px; }
+    .submit-btn { width: 100%; padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deco-circle-1"></div>
+<div class="deco-circle-2"></div>
+
+<div class="container">
+
+  <!-- ヘッダー -->
+  <header class="header">
+    <h1 class="title">The Common Table</h1>
+    <p class="subtitle">2026.5.17 &nbsp;at &nbsp;尾山台 um</p>
+  </header>
+
+  <!-- フォーム -->
+  <div id="form-area">
+
+    <div class="intro">
+      <p>本日は「The Common Table」にご来場いただき、ありがとうございました。<br>
+      よろしければ、感想を聞かせてください。</p>
+      <span class="time">所要時間：約1分</span>
+    </div>
+
+    <form id="survey-form">
+
+      <!-- Q1 -->
+      <div class="question">
+        <label class="question-label" for="q1">Q1. 今日の公演を一言で表すなら？</label>
+        <span class="question-hint">自由記述・任意</span>
+        <textarea id="q1" name="q1" placeholder="思い浮かんだ言葉を、そのまま。"></textarea>
+      </div>
+
+      <!-- Q2 -->
+      <div class="question">
+        <label class="question-label">Q2. 本公演を何で知りましたか？</label>
+        <span class="question-hint">複数選択可</span>
+        <div class="option-group">
+
+          <div class="subgroup-label">─ 出演者経由</div>
+          <label class="option"><input type="checkbox" name="q2" value="Group1（杉本ゆみ・Hanae Sakuyama・橋本歩・井谷享志）"><span>Group1（杉本ゆみ・Hanae Sakuyama・橋本歩・井谷享志）</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="Group2（中元徹・沼尾翔子・甲斐正樹・則武諒）"><span>Group2（中元徹・沼尾翔子・甲斐正樹・則武諒）</span></label>
+
+          <div class="subgroup-label">─ SNS・Web</div>
+          <label class="option"><input type="checkbox" name="q2" value="Instagram"><span>Instagram</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="X"><span>X</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="Facebook"><span>Facebook</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="Threads"><span>Threads</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="出演者の公式サイト"><span>出演者の公式サイト</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="尾山台 um のサイト"><span>尾山台 um のサイト</span></label>
+
+          <div class="subgroup-label">─ その他</div>
+          <label class="option"><input type="checkbox" name="q2" value="フライヤー"><span>フライヤー</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="会場での案内"><span>会場での案内</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="知人の紹介"><span>知人の紹介</span></label>
+          <label class="option"><input type="checkbox" name="q2" value="その他"><span>その他</span></label>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="question">
+        <label class="question-label" for="q3">Q3. 出演者へのメッセージ</label>
+        <span class="question-hint">自由記述・任意</span>
+        <textarea id="q3" name="q3" placeholder="演奏者へ、伝えたいことがあればぜひ。"></textarea>
+      </div>
+
+      <!-- Q4-A -->
+      <div class="question">
+        <label class="question-label">Q4-A. Group1 で印象に残った曲</label>
+        <span class="question-hint">複数選択可 ／ 杉本ゆみ・Hanae Sakuyama・橋本歩・井谷享志</span>
+        <div class="option-group">
+          <label class="option"><input type="checkbox" name="q4a" value="あめふりくまのこ"><span>あめふりくまのこ</span></label>
+          <label class="option"><input type="checkbox" name="q4a" value="故郷"><span>故郷</span></label>
+          <label class="option"><input type="checkbox" name="q4a" value="Frame"><span>Frame</span></label>
+          <label class="option"><input type="checkbox" name="q4a" value="波"><span>波</span></label>
+          <label class="option"><input type="checkbox" name="q4a" value="鬼のパンツ〜お肌にやさしい編〜"><span>鬼のパンツ〜お肌にやさしい編〜</span></label>
+          <label class="option"><input type="checkbox" name="q4a" value="かえるの合唱"><span>かえるの合唱</span></label>
+        </div>
+      </div>
+
+      <!-- Q4-B -->
+      <div class="question">
+        <label class="question-label">Q4-B. Group2 で印象に残った曲</label>
+        <span class="question-hint">複数選択可 ／ 中元徹・沼尾翔子・甲斐正樹・則武諒</span>
+        <div class="option-group">
+          <label class="option"><input type="checkbox" name="q4b" value="よる"><span>よる</span></label>
+          <label class="option"><input type="checkbox" name="q4b" value="No Return"><span>No Return</span></label>
+          <label class="option"><input type="checkbox" name="q4b" value="なみ"><span>なみ</span></label>
+          <label class="option"><input type="checkbox" name="q4b" value="無題 II"><span>無題 II</span></label>
+          <label class="option"><input type="checkbox" name="q4b" value="深淵"><span>深淵</span></label>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="question">
+        <label class="question-label">Q5. 今後のライブ案内を希望されますか？</label>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="q5" value="メールでお知らせを受け取る"><span>メールでお知らせを受け取る</span></label>
+          <label class="option"><input type="radio" name="q5" value="希望しない"><span>希望しない</span></label>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="question">
+        <label class="question-label" for="q6">Q6. メールアドレス</label>
+        <span class="question-hint">Q5でメール希望と答えた方のみ／任意</span>
+        <input type="email" id="q6" name="q6" placeholder="your@example.com">
+      </div>
+
+      <!-- 送信ボタン -->
+      <div class="submit-area">
+        <button type="submit" class="submit-btn" id="submit-btn">送　信</button>
+        <div class="error-msg" id="error-msg">送信に失敗しました。時間をおいて再度お試しください。</div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- 送信完了画面 -->
+  <div class="thanks" id="thanks">
+    <h2 class="thanks-title">Thank you</h2>
+    <p class="thanks-message">
+      アンケートにご協力いただき、<br>
+      ありがとうございました。<br><br>
+      今夜のひとときが、<br>
+      どこかにそっと残りますように🌙
+    </p>
+  </div>
+
+</div>
+
+<script>
+  document.getElementById('survey-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const btn = document.getElementById('submit-btn');
+    const errMsg = document.getElementById('error-msg');
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+    errMsg.classList.remove('show');
+
+    // フォームデータを収集
+    const data = {
+      q1: document.getElementById('q1').value.trim(),
+      q2: Array.from(document.querySelectorAll('input[name="q2"]:checked')).map(el => el.value),
+      q3: document.getElementById('q3').value.trim(),
+      q4a: Array.from(document.querySelectorAll('input[name="q4a"]:checked')).map(el => el.value),
+      q4b: Array.from(document.querySelectorAll('input[name="q4b"]:checked')).map(el => el.value),
+      q5: (document.querySelector('input[name="q5"]:checked') || {}).value || '',
+      q6: document.getElementById('q6').value.trim()
+    };
+
+    // GASに送信
+    google.script.run
+      .withSuccessHandler(function(result) {
+        if (result && result.status === 'success') {
+          document.getElementById('form-area').style.display = 'none';
+          document.getElementById('thanks').classList.add('show');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          showError();
+        }
+      })
+      .withFailureHandler(function(err) {
+        console.error(err);
+        showError();
+      })
+      .submitResponse(data);
+
+    function showError() {
+      btn.disabled = false;
+      btn.textContent = '送　信';
+      errMsg.classList.add('show');
+    }
+  });
+</script>
+
+</body>
+</html>
