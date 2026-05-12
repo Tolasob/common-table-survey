@@ -393,54 +393,27 @@
         </div>
       </div>
 
-      <!-- Q2-A -->
+      <!-- Q2 -->
       <div class="question">
-        <label class="question-label">Q2-A. Group1 でもう一度聴きたい曲は？</label>
-        <span class="question-hint">複数選択可</span>
-        <div class="option-group">
-          <label class="option"><input type="checkbox" name="q2a" value="あめふりくまのこ"><span>あめふりくまのこ</span></label>
-          <label class="option"><input type="checkbox" name="q2a" value="故郷"><span>故郷</span></label>
-          <label class="option"><input type="checkbox" name="q2a" value="Frame"><span>Frame</span></label>
-          <label class="option"><input type="checkbox" name="q2a" value="波"><span>波</span></label>
-          <label class="option"><input type="checkbox" name="q2a" value="鬼のパンツ〜お肌にやさしい編〜"><span>鬼のパンツ〜お肌にやさしい編〜</span></label>
-          <label class="option"><input type="checkbox" name="q2a" value="かえるの合唱"><span>かえるの合唱</span></label>
-        </div>
-      </div>
-
-      <!-- Q2-B -->
-      <div class="question">
-        <label class="question-label">Q2-B. Group2 でもう一度聴きたい曲は？</label>
-        <span class="question-hint">複数選択可</span>
-        <div class="option-group">
-          <label class="option"><input type="checkbox" name="q2b" value="よる"><span>よる</span></label>
-          <label class="option"><input type="checkbox" name="q2b" value="No Return"><span>No Return</span></label>
-          <label class="option"><input type="checkbox" name="q2b" value="なみ"><span>なみ</span></label>
-          <label class="option"><input type="checkbox" name="q2b" value="無題 II"><span>無題 II</span></label>
-          <label class="option"><input type="checkbox" name="q2b" value="深淵"><span>深淵</span></label>
-        </div>
+        <label class="question-label" for="q2">Q2. 出演者へのメッセージ</label>
+        <span class="question-hint">任意・ひとことでもぜひ</span>
+        <textarea id="q2" name="q2" placeholder="演奏者へ、伝えたいことがあればぜひ。"></textarea>
       </div>
 
       <!-- Q3 -->
       <div class="question">
-        <label class="question-label" for="q3">Q3. 出演者へのメッセージ</label>
-        <span class="question-hint">任意・ひとことでもぜひ</span>
-        <textarea id="q3" name="q3" placeholder="演奏者へ、伝えたいことがあればぜひ。"></textarea>
+        <label class="question-label">Q3. 今後のライブ案内を希望されますか？</label>
+        <div class="option-group">
+          <label class="option"><input type="radio" name="q3" value="メールでお知らせを受け取る"><span>メールでお知らせを受け取る</span></label>
+          <label class="option"><input type="radio" name="q3" value="希望しない"><span>希望しない</span></label>
+        </div>
       </div>
 
       <!-- Q4 -->
       <div class="question">
-        <label class="question-label">Q4. 今後のライブ案内を希望されますか？</label>
-        <div class="option-group">
-          <label class="option"><input type="radio" name="q4" value="メールでお知らせを受け取る"><span>メールでお知らせを受け取る</span></label>
-          <label class="option"><input type="radio" name="q4" value="希望しない"><span>希望しない</span></label>
-        </div>
-      </div>
-
-      <!-- Q5 -->
-      <div class="question">
-        <label class="question-label" for="q5">Q5. メールアドレス</label>
-        <span class="question-hint">Q4でメール希望と答えた方のみ／任意</span>
-        <input type="email" id="q5" name="q5" placeholder="your@example.com">
+        <label class="question-label" for="q4">Q4. メールアドレス</label>
+        <span class="question-hint">Q3でメール希望と答えた方のみ／任意</span>
+        <input type="email" id="q4" name="q4" placeholder="your@example.com">
       </div>
 
       <!-- 送信ボタン -->
@@ -478,11 +451,9 @@
     // フォームデータを収集
     const data = {
       q1: Array.from(document.querySelectorAll('input[name="q1"]:checked')).map(el => el.value),
-      q2a: Array.from(document.querySelectorAll('input[name="q2a"]:checked')).map(el => el.value),
-      q2b: Array.from(document.querySelectorAll('input[name="q2b"]:checked')).map(el => el.value),
-      q3: document.getElementById('q3').value.trim(),
-      q4: (document.querySelector('input[name="q4"]:checked') || {}).value || '',
-      q5: document.getElementById('q5').value.trim()
+      q2: document.getElementById('q2').value.trim(),
+      q3: (document.querySelector('input[name="q3"]:checked') || {}).value || '',
+      q4: document.getElementById('q4').value.trim()
     };
 
     // GASにfetchで送信
