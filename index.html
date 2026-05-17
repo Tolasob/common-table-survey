@@ -402,18 +402,32 @@
 
       <!-- Q3 -->
       <div class="question">
-        <label class="question-label">Q3. 今後のライブ案内を希望されますか？</label>
-        <div class="option-group">
-          <label class="option"><input type="radio" name="q3" value="メールでお知らせを受け取る"><span>メールでお知らせを受け取る</span></label>
-          <label class="option"><input type="radio" name="q3" value="希望しない"><span>希望しない</span></label>
+        <p class="question-label">Q3. 今後のライブ情報はSNSにてお知らせしています。</p>
+        <p class="question-hint">よろしければ、フォローしてみてください。</p>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
+          <a href="https://www.instagram.com/toru_nakamoto/"
+             target="_blank"
+             style="display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+                    background: rgba(252,248,238,0.6); border: 1px solid #e0d0a8;
+                    border-radius: 8px; text-decoration: none; color: #4a4238;
+                    font-size: 14px; transition: background 0.15s;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#c9a96a" stroke="none"/>
+            </svg>
+            🎹 中元徹（Instagram）
+          </a>
+          <a href="https://www.instagram.com/yumigrapes/"
+             target="_blank"
+             style="display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+                    background: rgba(252,248,238,0.6); border: 1px solid #e0d0a8;
+                    border-radius: 8px; text-decoration: none; color: #4a4238;
+                    font-size: 14px; transition: background 0.15s;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a96a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#c9a96a" stroke="none"/>
+            </svg>
+            🎹 杉本ゆみ（Instagram）
+          </a>
         </div>
-      </div>
-
-      <!-- Q4 -->
-      <div class="question">
-        <label class="question-label" for="q4">Q4. メールアドレス</label>
-        <span class="question-hint">Q3でメール希望と答えた方のみ／任意</span>
-        <input type="email" id="q4" name="q4" placeholder="your@example.com">
       </div>
 
       <!-- 送信ボタン -->
@@ -451,9 +465,7 @@
     // フォームデータを収集
     const data = {
       q1: Array.from(document.querySelectorAll('input[name="q1"]:checked')).map(el => el.value),
-      q2: document.getElementById('q2').value.trim(),
-      q3: (document.querySelector('input[name="q3"]:checked') || {}).value || '',
-      q4: document.getElementById('q4').value.trim()
+      q2: document.getElementById('q2').value.trim()
     };
 
     // GASにfetchで送信
